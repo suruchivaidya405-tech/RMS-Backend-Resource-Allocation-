@@ -1,0 +1,3 @@
+com\example\reporting\ReportingServiceApplication.class
+com\example\reporting\client\ResourceServiceClient.class
+com\example\reporting\controller\ReportController.class
