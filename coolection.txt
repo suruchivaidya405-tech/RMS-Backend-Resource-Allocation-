@@ -1,0 +1,73 @@
+curl --location --request POST 'https://api.getpostman.com/collections' \
+--header 'X-API-Key: YOUR_POSTMAN_API_KEY' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "collection": {
+    "info": {
+      "name": "Resource Allocation Service",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Create Allocation",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"projectId\": \"proj-101\",\n    \"resourceId\": \"user-501\",\n    \"startDate\": \"2023-10-01\",\n    \"endDate\": \"2023-12-31\",\n    \"allocationPercentage\": 80,\n    \"status\": \"active\"\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/allocations",
+            "host": ["{{base_url}}"],
+            "path": ["allocations"]
+          }
+        }
+      },
+      {
+        "name": "Get All Allocations",
+        "request": {
+          "method": "GET",
+          "header": [],
+          "url": {
+            "raw": "{{base_url}}/allocations",
+            "host": ["{{base_url}}"],
+            "path": ["allocations"]
+          }
+        }
+      },
+      {
+        "name": "Create Release Request",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n    \"allocationId\": \"alloc-001\",\n    \"requestedBy\": \"user-601\",\n    \"reason\": \"Project completed early\",\n    \"proposedReleaseDate\": \"2023-12-15\"\n}"
+          },
+          "url": {
+            "raw": "{{base_url}}/release-requests",
+            "host": ["{{base_url}}"],
+            "path": ["release-requests"]
+          }
+        }
+      }
+    ],
+    "variable": [
+      {
+        "key": "base_url",
+        "value": "http://localhost:3001"
+      }
+    ]
+  }
+}'
