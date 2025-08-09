@@ -1,17 +1,35 @@
 package com.example.resourcelifecycle.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import java.time.LocalDate;
 
-@Entity
 @Data
+@Entity
+@Table(name = "release_request")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ReleaseRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long allocationId;
-    private String reason;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "allocation_id", nullable = false)
+    private Allocation allocation;
+
+    @Column(name = "requested_release_date", nullable = false)
     private LocalDate requestedReleaseDate;
-    private String status; // PENDING, APPROVED, REJECTED
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String reason;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDate createdAt;
 }
+

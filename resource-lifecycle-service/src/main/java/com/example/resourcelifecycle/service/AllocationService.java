@@ -12,12 +12,12 @@ public class AllocationService {
     @Autowired
     private AllocationRepository allocationRepository;
 
-    public Allocation createAllocation(Allocation allocation) {
-        return allocationRepository.save(allocation);
-    }
-
     public List<Allocation> getAllAllocations() {
         return allocationRepository.findAll();
+    }
+
+    public Allocation createAllocation(Allocation allocation) {
+        return allocationRepository.save(allocation);
     }
 
     public Allocation getAllocationById(Long id) {
@@ -25,19 +25,25 @@ public class AllocationService {
     }
 
     public Allocation updateAllocation(Long id, Allocation allocationDetails) {
-        Allocation allocation = allocationRepository.findById(id).orElse(null);
-        if (allocation != null) {
-            allocation.setProjectId(allocationDetails.getProjectId());
-            allocation.setResourceId(allocationDetails.getResourceId());
-            allocation.setStartDate(allocationDetails.getStartDate());
-            allocation.setEndDate(allocationDetails.getEndDate());
-            allocation.setStatus(allocationDetails.getStatus());
-            return allocationRepository.save(allocation);
-        }
-        return null;
+        return allocationRepository.findById(id)
+                .map(allocation -> {
+                    allocation.setProjectId(allocationDetails.getProjectId());
+                    allocation.setResourceId(allocationDetails.getResourceId());
+                    allocation.setStartDate(allocationDetails.getStartDate());
+                    allocation.setEndDate(allocationDetails.getEndDate());
+                    allocation.setAllocationPercentage(allocationDetails.getAllocationPercentage());
+                    //allocation.setStatus(allocationDetails.getStatus());
+                    return allocationRepository.save(allocation);
+                })
+                .orElse(null);
     }
 
-    public void deleteAllocation(Long id) {
-        allocationRepository.deleteById(id);
+    public boolean deleteAllocation(Long id) {
+        return allocationRepository.findById(id)
+                .map(allocation -> {
+                    allocationRepository.delete(allocation);
+                    return true;
+                })
+                .orElse(false);
     }
 }
